@@ -112,7 +112,7 @@ export function FreeGames() {
     <section className="section free-section">
       <SectionHeader
         eyebrow="SUA BIBLIOTECA AGRADECE"
-        title="Custa zero. Vale o resgate."
+        title="Custa zero. Vale o resgate…"
         to="/deals?free=1"
         action="Ver jogos grátis"
       >
@@ -133,11 +133,10 @@ export function FreeGames() {
               <div>
                 <span className="free-label">GRÁTIS PARA RESGATAR</span>
                 <h3>{deal.title}</h3>
-                <p>
+                <p className="free-meta">
                   <StoreBadge store={deal.store} />
-                  <span>
-                    {" "}
-                    · Era <Price value={deal.normalPrice} currency={deal.currency} />
+                  <span className="free-original-price">
+                    Era <Price value={deal.normalPrice} currency={deal.currency} />
                   </span>
                 </p>
                 <a href={deal.dealUrl} target="_blank" rel="noopener noreferrer">

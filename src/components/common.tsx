@@ -54,7 +54,7 @@ export function SectionHeader({
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
         <h2>
           {title}
-          <span className="heading-dot">.</span>
+          {!/[.!?…]$/.test(title) && <span className="heading-dot">.</span>}
         </h2>
       </div>
       {children}

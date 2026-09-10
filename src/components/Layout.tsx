@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ArrowUpRight, Menu, Search, X, Zap } from "lucide-react";
+import { ArrowUpRight, Menu, Search, X } from "lucide-react";
 const navigation = [
   ["/", "Home"],
   ["/news", "News"],
@@ -11,11 +11,8 @@ const navigation = [
 export function Logo() {
   return (
     <Link to="/" className="logo" aria-label="SpawnBrief — Home">
-      <span className="logo-icon">
-        <Zap size={23} fill="currentColor" />
-      </span>
-      spawn<span>brief</span>
-      <span className="logo-period">.</span>
+      <span className="logo-spawn">spawn</span>
+      <span className="logo-brief">brief<span className="logo-rule" /></span>
     </Link>
   );
 }

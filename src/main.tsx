@@ -13,27 +13,30 @@ import SearchPage from "./pages/SearchPage";
 import AboutPage from "./pages/AboutPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import "./styles.css";
+import { LocaleProvider } from "./i18n/LocaleContext";
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="news" element={<NewsPage />} />
-            <Route path="deals" element={<DealsPage />} />
-            <Route path="games" element={<GamesPage />} />
-            <Route path="games/:slug" element={<GamePage />} />
-            <Route path="releases" element={<ReleasesPage />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="about" element={<AboutPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <LocaleProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="news" element={<NewsPage />} />
+              <Route path="deals" element={<DealsPage />} />
+              <Route path="games" element={<GamesPage />} />
+              <Route path="games/:slug" element={<GamePage />} />
+              <Route path="releases" element={<ReleasesPage />} />
+              <Route path="search" element={<SearchPage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </LocaleProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );

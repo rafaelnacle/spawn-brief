@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { useState } from "react";
 import { useNews } from "../hooks/useContent";
 import {
@@ -12,6 +13,7 @@ import { NewsGrid } from "../components/News";
 import { newsCategories } from "../types";
 import { normalizeText } from "../utils/format";
 export default function NewsPage() {
+  const { t } = useLocale();
   const query = useNews();
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
@@ -28,19 +30,20 @@ export default function NewsPage() {
   return (
     <div className="container inner-page">
       <div className="page-intro">
-        <span className="eyebrow">O UNIVERSO DOS GAMES, EM DIA</span>
+        <span className="eyebrow">{t("O UNIVERSO DOS GAMES, EM DIA")}</span>
         <h1>
-          News<span>.</span>
+          {t("News")}
+          <span>.</span>
         </h1>
-        <p>As histórias que merecem um lugar no seu radar.</p>
+        <p>{t("As histórias que merecem um lugar no seu radar.")}</p>
       </div>
       <div className="page-toolbar">
-        <SearchInput value={search} onChange={setSearch} placeholder="Buscar notícias…" />
+        <SearchInput value={search} onChange={setSearch} placeholder={t("Buscar notícias…")} />
         <label className="select-label">
-          Ordenar por
+          {t("Ordenar por")}
           <select value={sort} onChange={(event) => setSort(event.target.value)}>
-            <option value="latest">Mais recentes</option>
-            <option value="popular">Populares (demo)</option>
+            <option value="latest">{t("Mais recentes")}</option>
+            <option value="popular">{t("Populares (demo)")}</option>
           </select>
         </label>
       </div>
@@ -53,7 +56,7 @@ export default function NewsPage() {
       ) : results.length ? (
         <>
           <p className="result-count" aria-live="polite">
-            {results.length} histórias no radar
+            {t("{count} histórias no radar", { count: results.length })}
           </p>
           <NewsGrid articles={results} />
         </>
@@ -66,7 +69,7 @@ export default function NewsPage() {
               setSearch("");
             }}
           >
-            Limpar filtros
+            {t("Limpar filtros")}
           </button>
         </EmptyState>
       )}

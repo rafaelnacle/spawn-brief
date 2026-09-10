@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { useState } from "react";
 import { ArrowUpRight, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -15,6 +16,7 @@ import { newsCategories } from "../types";
 import { HotDeals, FreeGames } from "../components/Deals";
 import { PopularGames, UpcomingReleases } from "../components/Games";
 export default function Home() {
+  const { t } = useLocale();
   const query = useNews();
   const [category, setCategory] = useState("All");
   const articles = query.data ?? [];
@@ -26,17 +28,21 @@ export default function Home() {
     <div className="container home">
       <div className="edition-bar">
         <span>
-          <span className="live-dot" /> SEU CHECKPOINT DIÁRIO
+          <span className="live-dot" />
+          {t("SEU CHECKPOINT DIÁRIO")}
         </span>
-        <span>Games. Sem perder o fio.</span>
+        <span>{t("Games. Sem perder o fio.")}</span>
         <span>
-          BRASIL <span className="edition-separator">/</span> PT-BR
+          {t("BRASIL")}
+          <span className="edition-separator">/</span>
+          {t("PT-BR")}
         </span>
       </div>
       <HeroNews articles={articles} />
       <div className="trending-strip">
         <span>
-          <Zap size={15} /> EM ALTA
+          <Zap size={15} />
+          {t("EM ALTA")}
         </span>
         {["Clair Obscur", "Silksong", "Hades II", "Cyberpunk 2077"].map((term) => (
           <Link key={term} to={`/search?q=${encodeURIComponent(term)}`}>
@@ -47,10 +53,10 @@ export default function Home() {
       </div>
       <section className="section">
         <SectionHeader
-          eyebrow="O QUE ESTÁ ACONTECENDO"
-          title="Últimas notícias"
+          eyebrow={t("O QUE ESTÁ ACONTECENDO")}
+          title={t("Últimas notícias")}
           to="/news"
-          action="Todas as notícias"
+          action={t("Todas as notícias")}
         />
         <CategoryTabs items={newsCategories} value={category} onChange={setCategory} />
         {query.isPending ? (
@@ -60,7 +66,7 @@ export default function Home() {
         ) : filtered.length ? (
           <NewsGrid articles={filtered} />
         ) : (
-          <EmptyState description="Sem notícias nesta categoria na edição demonstrativa." />
+          <EmptyState description={t("Sem notícias nesta categoria na edição demonstrativa.")} />
         )}
         <DemoNotice />
       </section>

@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { steamProxyPath } from "./src/services/region.ts";
 
 export default defineConfig({
   plugins: [react()],
@@ -8,7 +9,7 @@ export default defineConfig({
       "/api/steam": {
         target: "https://store.steampowered.com",
         changeOrigin: true,
-        rewrite: () => "/api/featuredcategories?cc=br&l=brazilian",
+        rewrite: steamProxyPath,
       },
     },
   },

@@ -1,4 +1,4 @@
-import type { Deal, GameRelease, Store } from "../types/index.ts";
+import type { Currency, Deal, GameRelease, Store } from "../types/index.ts";
 import { isRecord, safeImage } from "./http.ts";
 
 export type SteamGameResponse = {
@@ -21,14 +21,14 @@ export type CheapSharkDealResponse = {
   thumb: string;
   steamAppID: string | null;
 };
-export function mapSteamGameToDeal(value: unknown): Deal | null {
+export function mapSteamGameToDeal(value: unknown, currency: Currency = "BRL"): Deal | null {
   if (
     !isRecord(value) ||
     !Number.isInteger(value.id) ||
     typeof value.id !== "number" ||
     value.id <= 0 ||
     typeof value.name !== "string" ||
-    value.currency !== "BRL"
+    value.currency !== currency
   )
     return null;
   const normal = value.original_price,
@@ -44,15 +44,15 @@ export function mapSteamGameToDeal(value: unknown): Deal | null {
   )
     return null;
   return {
-    id: `steam-${value.id}`,
+    id: `steam-${currency}-${value.id}`,
     title: value.name,
     image: safeImage(value.large_capsule_image) ?? safeImage(value.header_image),
     store: "Steam",
     normalPrice: normal / 100,
     salePrice: sale / 100,
     discount: Math.round((1 - sale / normal) * 100),
-    currency: "BRL",
-    dealUrl: `https://store.steampowered.com/app/${value.id}/?cc=br`,
+    currency,
+    dealUrl: `https://store.steampowered.com/app/${value.id}/?cc=${currency === "BRL" ? "br" : "us"}`,
     steamAppId: value.id,
     provider: "Steam",
   };

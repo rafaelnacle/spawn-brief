@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { mapCheapSharkDeal, mapSteamGameToDeal, mapSteamRelease } from "./mappers.ts";
 import { filterDeals, type DealFilters } from "../features/deals/filterDeals.ts";
+import { steamProxyPath, steamRegion } from "./region.ts";
 
 const steam = {
   id: 1091500,
@@ -27,6 +28,30 @@ test("Steam cents become BRL amounts and correct discount", () => {
   assert.equal(deal?.salePrice, 79.96);
   assert.equal(deal?.discount, 60);
   assert.equal(deal?.currency, "BRL");
+});
+test("Steam US keeps the real USD price, a regional URL and a distinct identity", () => {
+  const us = mapSteamGameToDeal(
+    { ...steam, currency: "USD", original_price: 5999, final_price: 2399 },
+    "USD",
+  );
+  assert.equal(us?.salePrice, 23.99);
+  assert.equal(us?.currency, "USD");
+  assert.equal(new URL(us!.dealUrl).searchParams.get("cc"), "us");
+  assert.notEqual(us?.id, mapSteamGameToDeal(steam)?.id);
+  assert.equal(mapSteamGameToDeal(steam, "USD"), null);
+});
+test("regional proxy permits only Brazil or US and never forwards arbitrary destinations", () => {
+  assert.equal(steamRegion("pt-BR").currency, "BRL");
+  assert.equal(steamRegion("en-US").currency, "USD");
+  assert.equal(
+    steamProxyPath("/api/steam?cc=us&l=brazilian"),
+    "/api/featuredcategories?cc=us&l=english",
+  );
+  assert.equal(steamProxyPath("/api/steam?cc=br"), "/api/featuredcategories?cc=br&l=brazilian");
+  assert.equal(
+    steamProxyPath("/api/steam?cc=xx&url=https://example.com"),
+    "/api/featuredcategories?cc=br&l=brazilian",
+  );
 });
 test("CheapShark keeps USD and correctly encodes its redirect ID once", () => {
   const deal = mapCheapSharkDeal(cheap, stores);

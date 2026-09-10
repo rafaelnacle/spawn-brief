@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Menu, Search, X } from "lucide-react";
@@ -9,14 +10,19 @@ const navigation = [
   ["/games", "Games"],
 ];
 export function Logo() {
+  const { t } = useLocale();
   return (
-    <Link to="/" className="logo" aria-label="SpawnBrief — Home">
+    <Link to="/" className="logo" aria-label={t("SpawnBrief — Home")}>
       <span className="logo-spawn">spawn</span>
-      <span className="logo-brief">brief<span className="logo-rule" /></span>
+      <span className="logo-brief">
+        brief
+        <span className="logo-rule" />
+      </span>
     </Link>
   );
 }
 export function Header() {
+  const { t, locale, setLocale } = useLocale();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -25,17 +31,21 @@ export function Header() {
     const anchor = location.hash ? document.getElementById(location.hash.slice(1)) : null;
     if (anchor) anchor.scrollIntoView();
     else window.scrollTo(0, 0);
-    const label = navigation.find(([path]) => path === location.pathname)?.[1];
-    document.title = label ? `${label} — SpawnBrief` : "SpawnBrief — Seu próximo jogo começa aqui";
   }, [location.pathname, location.hash]);
+  useEffect(() => {
+    const label = navigation.find(([path]) => path === location.pathname)?.[1];
+    document.title = label
+      ? `${t(label)} — SpawnBrief`
+      : `SpawnBrief — ${t("Encontre seu próximo play")}`;
+  }, [location.pathname, t]);
   return (
     <header className="site-header">
       <div className="container header-inner">
         <Logo />
-        <nav aria-label="Navegação principal" className={open ? "main-nav open" : "main-nav"}>
+        <nav aria-label={t("Navegação principal")} className={open ? "main-nav open" : "main-nav"}>
           {navigation.map(([to, label]) => (
             <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>
-              {label}
+              {t(label)}
               {label === "Deals" && <span className="nav-dot" />}
             </NavLink>
           ))}
@@ -51,19 +61,40 @@ export function Header() {
         >
           <Search size={17} />
           <input
-            aria-label="Busca global"
-            placeholder="Buscar no SpawnBrief"
+            aria-label={t("Busca global")}
+            placeholder={t("Buscar no SpawnBrief")}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
-          <button aria-label="Pesquisar" type="submit">
+          <button aria-label={t("Pesquisar")} type="submit">
             <ArrowUpRight size={17} />
           </button>
         </form>
+        <div className="language-switch" role="group" aria-label={t("Idioma do site")}>
+          <button
+            type="button"
+            lang="pt-BR"
+            aria-label="Português"
+            aria-pressed={locale === "pt-BR"}
+            onClick={() => setLocale("pt-BR")}
+          >
+            PT
+          </button>
+          <span aria-hidden="true">/</span>
+          <button
+            type="button"
+            lang="en"
+            aria-label="English"
+            aria-pressed={locale === "en-US"}
+            onClick={() => setLocale("en-US")}
+          >
+            EN
+          </button>
+        </div>
         <button
           className="menu-button"
           aria-expanded={open}
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-label={t(open ? "Fechar menu" : "Abrir menu")}
           onClick={() => setOpen(!open)}
         >
           {open ? <X /> : <Menu />}
@@ -73,46 +104,48 @@ export function Header() {
   );
 }
 export function Footer() {
+  const { t } = useLocale();
   return (
     <footer className="site-footer">
       <div className="container footer-main">
         <div>
           <Logo />
-          <p>Gaming news, releases and deals in one place.</p>
-          <span className="footer-tagline">Menos ruído. Mais jogo.</span>
+          <p>{t("Gaming news, releases and deals in one place.")}</p>
+          <span className="footer-tagline">{t("Menos ruído. Mais jogo.")}</span>
         </div>
-        <nav aria-label="Navegação do rodapé">
-          <Link to="/news">News</Link>
-          <Link to="/deals">Deals</Link>
-          <Link to="/games">Games</Link>
+        <nav aria-label={t("Navegação do rodapé")}>
+          <Link to="/news">{t("News")}</Link>
+          <Link to="/deals">{t("Deals")}</Link>
+          <Link to="/games">{t("Games")}</Link>
         </nav>
-        <nav aria-label="Sobre o projeto">
-          <Link to="/about#sources">Sources</Link>
-          <Link to="/about">About</Link>
+        <nav aria-label={t("Sobre o projeto")}>
+          <Link to="/about#sources">{t("Sources")}</Link>
+          <Link to="/about">{t("About")}</Link>
           <Link to="/about#github">GitHub</Link>
         </nav>
         <div className="footer-note">
-          <span className="eyebrow">FEITO PARA QUEM JOGA</span>
+          <span className="eyebrow">{t("FEITO PARA QUEM JOGA")}</span>
           <p>
-            Descubra o próximo mundo
+            {t("Descubra o próximo mundo")}
             <br />
-            em que você vai se perder.
+            {t("em que você vai se perder.")}
           </p>
         </div>
       </div>
       <div className="container footer-bottom">
         <span>© {new Date().getFullYear()} SpawnBrief</span>
-        <span>News belongs to their respective publishers.</span>
-        <span>Dados: Steam & CheapShark</span>
+        <span>{t("News belongs to their respective publishers.")}</span>
+        <span>{t("Dados: Steam & CheapShark")}</span>
       </div>
     </footer>
   );
 }
 export function Layout() {
+  const { t } = useLocale();
   return (
     <>
       <a className="skip-link" href="#main">
-        Pular para o conteúdo
+        {t("Pular para o conteúdo")}
       </a>
       <Header />
       <main id="main">

@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { formatPrice } from "../utils/format";
+import { useLocale } from "../i18n/LocaleContext";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SlidersHorizontal, RotateCw } from "lucide-react";
 import { useDeals } from "../hooks/useDeals";
@@ -6,6 +8,7 @@ import { DealGrid, DealsStatus } from "../components/Deals";
 import { EmptyState, ErrorState, LoadingSkeleton, SearchInput } from "../components/common";
 import { filterDeals, type DealFilters } from "../features/deals/filterDeals";
 export default function DealsPage() {
+  const { t, currency, locale } = useLocale();
   const query = useDeals();
   const [params, setParams] = useSearchParams();
   const onlyFree = params.get("free") === "1";
@@ -14,10 +17,17 @@ export default function DealsPage() {
     store: "All",
     discount: 0,
     maxPrice: Infinity,
-    currency: "All",
+    currency: onlyFree ? "All" : currency,
     sort: "discount",
   };
   const [filters, setFilters] = useState<DealFilters>(initial);
+  useEffect(() => {
+    setFilters((previous) => ({
+      ...previous,
+      currency: onlyFree ? "All" : currency,
+      maxPrice: Infinity,
+    }));
+  }, [currency, onlyFree]);
   function update<K extends keyof DealFilters>(key: K, value: DealFilters[K]) {
     setFilters((previous) => ({ ...previous, [key]: value }));
   }
@@ -39,11 +49,12 @@ export default function DealsPage() {
     <div className="container inner-page">
       <div className="page-intro intro-with-action">
         <div>
-          <span className="eyebrow">MAIS JOGOS. MENOS NO CARRINHO.</span>
+          <span className="eyebrow">{t("MAIS JOGOS. MENOS NO CARRINHO.")}</span>
           <h1>
-            Hot deals<span>.</span>
+            {t("Hot deals")}
+            <span>.</span>
           </h1>
-          <p>Encontre seu próximo jogo por um preço que vale o play.</p>
+          <p>{t("Encontre seu próximo jogo por um preço que vale o play.")}</p>
         </div>
         <button
           className="button secondary"
@@ -51,44 +62,44 @@ export default function DealsPage() {
           onClick={() => void query.refetch()}
         >
           <RotateCw size={15} className={query.isFetching ? "spin" : ""} />
-          {query.isFetching ? "Atualizando" : "Atualizar ofertas"}
+          {t(query.isFetching ? "Atualizando" : "Atualizar ofertas")}
         </button>
       </div>
       <div className="deals-layout">
         <aside className="filter-panel">
           <h2>
             <SlidersHorizontal size={16} />
-            Filtrar ofertas
+            {t("Filtrar ofertas")}
           </h2>
           <SearchInput
             value={filters.search}
             onChange={(value) => update("search", value)}
-            placeholder="Buscar jogo…"
+            placeholder={t("Buscar jogo…")}
           />
           <label>
-            Loja
+            {t("Loja")}
             <select value={filters.store} onChange={(e) => update("store", e.target.value)}>
-              <option value="All">Todas as lojas</option>
+              <option value="All">{t("Todas as lojas")}</option>
               {stores.map((store) => (
                 <option key={store}>{store}</option>
               ))}
             </select>
           </label>
           <label>
-            Desconto mínimo
+            {t("Desconto mínimo")}
             <select
               value={filters.discount}
               onChange={(e) => update("discount", Number(e.target.value))}
             >
               {[0, 25, 50, 75].map((value) => (
                 <option key={value} value={value}>
-                  {value === 0 ? "Qualquer desconto" : `${value}% ou mais`}
+                  {value === 0 ? t("Qualquer desconto") : t("{value}% ou mais", { value })}
                 </option>
               ))}
             </select>
           </label>
           <label>
-            Moeda
+            {t("Moeda")}
             <select
               value={filters.currency}
               onChange={(e) => {
@@ -96,29 +107,31 @@ export default function DealsPage() {
                 update("maxPrice", Infinity);
               }}
             >
-              <option value="All">Todas as moedas</option>
-              <option value="BRL">Real brasileiro (R$)</option>
-              <option value="USD">Dólar americano (US$)</option>
+              <option value="All">{t("Todas as moedas")}</option>
+              <option value="BRL">{t("Real brasileiro (R$)")}</option>
+              <option value="USD">{t("Dólar americano (US$)")}</option>
             </select>
           </label>
           <label>
-            Preço máximo
+            {t("Preço máximo")}
             <select
               disabled={filters.currency === "All" || onlyFree}
               value={onlyFree ? 0 : filters.maxPrice}
               onChange={(e) => update("maxPrice", Number(e.target.value))}
             >
-              <option value={Infinity}>Qualquer preço</option>
+              <option value={Infinity}>{t("Qualquer preço")}</option>
               {[20, 50, 100].map((value) => (
                 <option key={value} value={value}>
-                  Até {filters.currency === "USD" ? "US$" : "R$"} {value}
+                  {t("Até {price}", {
+                    price: formatPrice(value, filters.currency === "USD" ? "USD" : "BRL", locale),
+                  })}
                 </option>
               ))}
-              {onlyFree && <option value={0}>Grátis</option>}
+              {onlyFree && <option value={0}>{t("Grátis")}</option>}
             </select>
           </label>
           {filters.currency === "All" && (
-            <p className="filter-help">Escolha uma moeda para filtrar por preço.</p>
+            <p className="filter-help">{t("Escolha uma moeda para filtrar por preço.")}</p>
           )}
           <label className="checkbox-label">
             <input
@@ -126,7 +139,7 @@ export default function DealsPage() {
               checked={onlyFree}
               onChange={(e) => setParams(e.target.checked ? { free: "1" } : {})}
             />
-            Só jogos temporariamente grátis
+            {t("Só jogos temporariamente grátis")}
           </label>
           <button
             className="reset-filters"
@@ -135,18 +148,20 @@ export default function DealsPage() {
               setParams({});
             }}
           >
-            Limpar filtros
+            {t("Limpar filtros")}
           </button>
         </aside>
         <div className="deals-results">
           <div className="results-toolbar">
-            <span aria-live="polite">{results.length} ofertas encontradas</span>
+            <span aria-live="polite">
+              {t("{count} ofertas encontradas", { count: results.length })}
+            </span>
             <label className="select-label">
-              Ordenar
+              {t("Ordenar")}
               <select value={filters.sort} onChange={(e) => update("sort", e.target.value)}>
-                <option value="discount">Maior desconto</option>
-                <option value="price">Menor preço (por moeda)</option>
-                <option value="title">Título A–Z</option>
+                <option value="discount">{t("Maior desconto")}</option>
+                <option value="price">{t("Menor preço (por moeda)")}</option>
+                <option value="title">{t("Título A–Z")}</option>
               </select>
             </label>
           </div>
@@ -155,7 +170,7 @@ export default function DealsPage() {
             <LoadingSkeleton count={6} />
           ) : query.isError ? (
             <ErrorState
-              message="As lojas não responderam. Tente novamente em instantes."
+              message={t("As lojas não responderam. Tente novamente em instantes.")}
               retry={() => void query.refetch()}
             />
           ) : results.length ? (
@@ -175,14 +190,14 @@ export default function DealsPage() {
                   setParams({});
                 }}
               >
-                Ver todas as ofertas
+                {t("Ver todas as ofertas")}
               </button>
             </EmptyState>
           )}
           <p className="price-note">
-            Preços reais fornecidos por Steam (BRL) e CheapShark (USD), sem conversão cambial. A
-            disponibilidade e o valor final são confirmados na loja. Esta lista consulta até 60
-            ofertas da CheapShark e os destaques da Steam.
+            {t(
+              "Preços regionais da Steam (Brasil em R$, Estados Unidos em US$) e ofertas da CheapShark sempre em US$. Sem conversão cambial. Confira a disponibilidade e o valor final na loja. A seleção inclui até 60 ofertas da CheapShark e os destaques da Steam.",
+            )}
           </p>
         </div>
       </div>

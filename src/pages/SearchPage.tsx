@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { useSearchParams } from "react-router-dom";
 import { useDeals } from "../hooks/useDeals";
 import { useGames, useNews } from "../hooks/useContent";
@@ -13,6 +14,7 @@ import {
 } from "../components/common";
 import { normalizeText } from "../utils/format";
 export default function SearchPage() {
+  const { t } = useLocale();
   const [params, setParams] = useSearchParams();
   const term = params.get("q") ?? "";
   const match = (title: string) => normalizeText(title).includes(normalizeText(term.trim()));
@@ -25,27 +27,30 @@ export default function SearchPage() {
   return (
     <div className="container inner-page">
       <div className="page-intro">
-        <span className="eyebrow">SIGA SUA CURIOSIDADE</span>
+        <span className="eyebrow">{t("SIGA SUA CURIOSIDADE")}</span>
         <h1>
-          Encontre seu próximo play<span>.</span>
+          {t("Encontre seu próximo play")}
+          <span>.</span>
         </h1>
       </div>
       <SearchInput
         value={term}
         onChange={(value) => setParams(value ? { q: value } : {}, { replace: true })}
-        placeholder="Busque por jogos, notícias e ofertas…"
+        placeholder={t("Busque por jogos, notícias e ofertas…")}
       />
       {!term.trim() ? (
         <div className="section">
           <EmptyState
-            title="O que está no seu radar?"
-            description="Digite o nome de um jogo ou um assunto para pesquisar no conteúdo carregado."
+            title={t("O que está no seu radar?")}
+            description={t(
+              "Digite o nome de um jogo ou um assunto para pesquisar no conteúdo carregado.",
+            )}
           />
         </div>
       ) : (
         <>
           <section className="section">
-            <SectionHeader title={`Games (${gameResults.length})`} />
+            <SectionHeader title={`${t("Games")} (${gameResults.length})`} />
             {games.isPending ? (
               <LoadingSkeleton />
             ) : games.isError ? (
@@ -53,11 +58,11 @@ export default function SearchPage() {
             ) : gameResults.length ? (
               <GameGrid games={gameResults} />
             ) : (
-              <EmptyState title="Nenhum jogo encontrado" />
+              <EmptyState title={t("Nenhum jogo encontrado")} />
             )}
           </section>
           <section className="section">
-            <SectionHeader title={`News (${newsResults.length})`} />
+            <SectionHeader title={`${t("News")} (${newsResults.length})`} />
             {news.isPending ? (
               <LoadingSkeleton />
             ) : news.isError ? (
@@ -65,11 +70,11 @@ export default function SearchPage() {
             ) : newsResults.length ? (
               <NewsGrid articles={newsResults} />
             ) : (
-              <EmptyState title="Nenhuma notícia encontrada" />
+              <EmptyState title={t("Nenhuma notícia encontrada")} />
             )}
           </section>
           <section className="section">
-            <SectionHeader title={`Deals (${dealResults.length})`} />
+            <SectionHeader title={`${t("Deals")} (${dealResults.length})`} />
             {deals.isPending ? (
               <LoadingSkeleton />
             ) : deals.isError ? (
@@ -77,7 +82,7 @@ export default function SearchPage() {
             ) : dealResults.length ? (
               <DealGrid deals={dealResults} />
             ) : (
-              <EmptyState title="Nenhuma oferta encontrada" />
+              <EmptyState title={t("Nenhuma oferta encontrada")} />
             )}
             <DealsStatus query={deals} />
           </section>

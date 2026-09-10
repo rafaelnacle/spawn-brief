@@ -1,13 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSteamCatalog } from "../services/steam";
 import { getCheapSharkDeals } from "../services/cheapshark";
-export const useSteam = () =>
-  useQuery({
-    queryKey: ["steam-catalog"],
-    queryFn: ({ signal }) => getSteamCatalog(signal),
+import { useLocale } from "../i18n/LocaleContext";
+export function useSteam() {
+  const { locale } = useLocale();
+  return useQuery({
+    queryKey: ["steam-catalog", locale],
+    queryFn: ({ signal }) => getSteamCatalog(locale, signal),
     staleTime: 10 * 60_000,
     retry: 1,
   });
+}
 export function useDeals() {
   const steam = useSteam();
   const cheapshark = useQuery({

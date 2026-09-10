@@ -1,9 +1,9 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { useState, type ReactNode } from "react";
 import { ArrowUpRight, Gamepad2, Search, RotateCw, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Currency } from "../types";
 import { formatPrice } from "../utils/format";
-
 export function Artwork({
   src,
   alt,
@@ -48,19 +48,20 @@ export function SectionHeader({
   action?: string;
   children?: ReactNode;
 }) {
+  const { t } = useLocale();
   return (
     <div className="section-heading">
       <div>
-        {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+        {eyebrow && <span className="eyebrow">{t(eyebrow)}</span>}
         <h2>
-          {title}
+          {t(title)}
           {!/[.!?…]$/.test(title) && <span className="heading-dot">.</span>}
         </h2>
       </div>
       {children}
       {to && (
         <Link className="text-link" to={to}>
-          {action}
+          {t(action)}
           <ArrowRight size={16} />
         </Link>
       )}
@@ -78,13 +79,14 @@ export function SearchInput({
   placeholder?: string;
   label?: string;
 }) {
+  const { t } = useLocale();
   return (
     <label className="search-input">
       <Search size={18} />
       <input
         type="search"
-        aria-label={label}
-        placeholder={placeholder}
+        aria-label={t(label)}
+        placeholder={t(placeholder)}
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />
@@ -100,8 +102,9 @@ export function CategoryTabs({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const { t } = useLocale();
   return (
-    <div className="category-tabs" role="group" aria-label="Categorias">
+    <div className="category-tabs" role="group" aria-label={t("Categorias")}>
       {items.map((item) => (
         <button
           key={item}
@@ -110,15 +113,16 @@ export function CategoryTabs({
           className={value === item ? "selected" : ""}
           onClick={() => onChange(item)}
         >
-          {item === "All" ? "Todas" : item}
+          {t(item === "All" ? "Todas" : item)}
         </button>
       ))}
     </div>
   );
 }
 export function LoadingSkeleton({ count = 3 }: { count?: number }) {
+  const { t } = useLocale();
   return (
-    <div className="skeleton-grid" role="status" aria-label="Carregando conteúdo">
+    <div className="skeleton-grid" role="status" aria-label={t("Carregando conteúdo")}>
       {Array.from({ length: count }, (_, i) => (
         <div className="skeleton" key={i}>
           <div />
@@ -138,11 +142,12 @@ export function EmptyState({
   description?: string;
   children?: ReactNode;
 }) {
+  const { t } = useLocale();
   return (
     <div className="empty-state">
       <Search size={26} />
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <h3>{t(title)}</h3>
+      <p>{t(description)}</p>
       {children}
     </div>
   );
@@ -154,18 +159,20 @@ export function ErrorState({
   retry: () => void;
   message?: string;
 }) {
+  const { t } = useLocale();
   return (
     <div className="error-state" role="alert">
-      <p>{message}</p>
+      <p>{t(message)}</p>
       <button className="button secondary" onClick={retry}>
         <RotateCw size={15} />
-        Tentar novamente
+        {t("Tentar novamente")}
       </button>
     </div>
   );
 }
 export function Price({ value, currency }: { value: number; currency: Currency }) {
-  return <span>{value === 0 ? "Grátis" : formatPrice(value, currency)}</span>;
+  const { t, locale } = useLocale();
+  return <span>{value === 0 ? t("Grátis") : formatPrice(value, currency, locale)}</span>;
 }
 export function StoreBadge({ store }: { store: string }) {
   return (
@@ -184,11 +191,12 @@ export function ExternalLink({
   children: ReactNode;
   className?: string;
 }) {
+  const { t } = useLocale();
   return (
     <a className={className} href={href} target="_blank" rel="noopener noreferrer">
       {children}
       <ArrowUpRight size={15} />
-      <span className="sr-only"> (abre em nova aba)</span>
+      <span className="sr-only">{t("(abre em nova aba)")}</span>
     </a>
   );
 }
@@ -197,10 +205,11 @@ export function DemoNotice({
 }: {
   children?: ReactNode;
 }) {
+  const { t } = useLocale();
   return (
     <p className="demo-notice">
-      <span>EDIÇÃO DEMO</span>
-      {children}
+      <span>{t("EDIÇÃO DEMO")}</span>
+      {typeof children === "string" ? t(children) : children}
     </p>
   );
 }

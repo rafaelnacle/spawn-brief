@@ -11,7 +11,7 @@
     "lint": "oxlint src",
     "format": "oxfmt src *.ts *.json index.html README.md docs",
     "format:check": "oxfmt --check src *.ts *.json index.html README.md docs",
-    "test": "node --experimental-strip-types --test src/services/mappers.test.ts"
+    "test": "node --experimental-strip-types --test src/services/mappers.test.ts src/i18n/locale.test.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.0",

@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { useGames, useNews } from "../hooks/useContent";
@@ -18,6 +19,7 @@ import { DealBadge, DealsStatus } from "../components/Deals";
 import { NewsGrid } from "../components/News";
 import { fullDate } from "../utils/format";
 export default function GamePage() {
+  const { t, locale } = useLocale();
   const { slug } = useParams();
   const games = useGames();
   const news = useNews();
@@ -39,11 +41,11 @@ export default function GamePage() {
     return (
       <div className="container inner-page">
         <EmptyState
-          title="Jogo não encontrado"
-          description="Este jogo ainda não faz parte do catálogo."
+          title={t("Jogo não encontrado")}
+          description={t("Este jogo ainda não faz parte do catálogo.")}
         >
           <Link className="button" to="/games">
-            Explorar jogos
+            {t("Explorar jogos")}
           </Link>
         </EmptyState>
       </div>
@@ -58,12 +60,17 @@ export default function GamePage() {
       </div>
       <div className="container game-detail">
         <div className="breadcrumbs">
-          <Link to="/games">Games</Link>
+          <Link to="/games">{t("Games")}</Link>
           <ChevronRight size={12} />
           <span>{game.title}</span>
         </div>
         <div className="game-overview">
-          <Artwork className="detail-cover" src={game.cover} alt={`Capa de ${game.title}`} eager />
+          <Artwork
+            className="detail-cover"
+            src={game.cover}
+            alt={t("Capa de {title}", { title: game.title })}
+            eager
+          />
           <div className="game-description">
             <div className="eyebrow">{game.genres.join(" / ")}</div>
             <h1>{game.title}</h1>
@@ -72,18 +79,18 @@ export default function GamePage() {
             <div className="game-facts">
               <div>
                 <span className="rating">{game.rating}</span>
-                <small>Nota demo</small>
+                <small>{t("Nota demo")}</small>
               </div>
               <div>
-                <span>Lançamento</span>
-                <strong>{fullDate(game.releaseDate)}</strong>
+                <span>{t("Lançamento")}</span>
+                <strong>{fullDate(game.releaseDate, locale)}</strong>
               </div>
               <div>
-                <span>Desenvolvedora</span>
+                <span>{t("Desenvolvedora")}</span>
                 <strong>{game.developer}</strong>
               </div>
               <div>
-                <span>Publisher</span>
+                <span>{t("Publisher")}</span>
                 <strong>{game.publisher}</strong>
               </div>
             </div>
@@ -91,16 +98,17 @@ export default function GamePage() {
               className="button secondary"
               href={`https://store.steampowered.com/app/${game.id}/`}
             >
-              Ver na Steam
+              {t("Ver na Steam")}
             </ExternalLink>
           </div>
         </div>
         <DemoNotice>
-          Informações do catálogo demonstrativo. Preços abaixo são consultados nas lojas em tempo
-          real, quando disponíveis.
+          {t(
+            "Informações do catálogo demonstrativo. Preços abaixo são consultados nas lojas em tempo real, quando disponíveis.",
+          )}
         </DemoNotice>
         <section className="section">
-          <SectionHeader title="Onde comprar" eyebrow="ESCOLHA SEU PRÓXIMO SAVE" />
+          <SectionHeader title={t("Onde comprar")} eyebrow={t("ESCOLHA SEU PRÓXIMO SAVE")} />
           {deals.isPending ? (
             <LoadingSkeleton />
           ) : deals.isError ? (
@@ -110,12 +118,12 @@ export default function GamePage() {
               <table className="price-table">
                 <thead>
                   <tr>
-                    <th>Loja</th>
-                    <th>Preço normal</th>
-                    <th>Preço atual</th>
-                    <th>Desconto</th>
+                    <th>{t("Loja")}</th>
+                    <th>{t("Preço normal")}</th>
+                    <th>{t("Preço atual")}</th>
+                    <th>{t("Desconto")}</th>
                     <th>
-                      <span className="sr-only">Oferta</span>
+                      <span className="sr-only">{t("Oferta")}</span>
                     </th>
                   </tr>
                 </thead>
@@ -140,7 +148,7 @@ export default function GamePage() {
                       </td>
                       <td>
                         <ExternalLink className="text-link" href={deal.dealUrl}>
-                          Ver oferta
+                          {t("Ver oferta")}
                         </ExternalLink>
                       </td>
                     </tr>
@@ -150,29 +158,32 @@ export default function GamePage() {
             </div>
           ) : (
             <EmptyState
-              title="Sem ofertas deste jogo nos destaques atuais"
-              description="As lojas podem ter outros preços. Consulte a página oficial para conferir."
+              title={t("Sem ofertas deste jogo nos destaques atuais")}
+              description={t(
+                "As lojas podem ter outros preços. Consulte a página oficial para conferir.",
+              )}
             >
               <ExternalLink
                 className="button secondary"
                 href={`https://store.steampowered.com/app/${game.id}/`}
               >
-                Consultar a Steam
+                {t("Consultar a Steam")}
               </ExternalLink>
             </EmptyState>
           )}
           <DealsStatus query={deals} />
           <p className="price-note">
-            A comparação inclui somente ofertas retornadas pelas fontes. O histórico de menor preço
-            ainda não está disponível.
+            {t(
+              "A comparação inclui somente ofertas retornadas pelas fontes. O histórico de menor preço ainda não está disponível.",
+            )}
           </p>
         </section>
         <section className="section">
-          <SectionHeader title="No radar" eyebrow="MAIS SOBRE ESTE JOGO" />
+          <SectionHeader title={t("No radar")} eyebrow={t("MAIS SOBRE ESTE JOGO")} />
           {related.length ? (
             <NewsGrid articles={related} />
           ) : (
-            <EmptyState title="Novas histórias em breve" />
+            <EmptyState title={t("Novas histórias em breve")} />
           )}
         </section>
       </div>

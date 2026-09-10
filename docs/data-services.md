@@ -6,7 +6,7 @@ Componentes consomem modelos de `src/types` por hooks do TanStack Query. Chamada
 
 O cache dura dez minutos para promoções, cinco para notícias e uma hora para jogos. Chamadas têm timeout de quinze segundos e uma tentativa adicional. As duas fontes de promoções falham independentemente. Respostas inválidas são descartadas; valores malformados não viram preços zero. Imagens externas aceitam somente HTTPS.
 
-Steam: `featuredcategories?cc=br&l=brazilian`. `specials`, `top_sellers` e `new_releases` contribuem somente quando o preço é reduzido; resultados são deduplicados por aplicativo. `coming_soon` alimenta o calendário sem inventar datas que o endpoint não fornece. Preços inteiros são divididos por cem e só BRL é aceito neste adaptador.
+Steam: `featuredcategories?cc=br&l=brazilian` para português e `featuredcategories?cc=us&l=english` para inglês. O cache do TanStack Query inclui o idioma; IDs normalizados incluem a moeda. Links das ofertas apontam para a região consultada. `specials`, `top_sellers` e `new_releases` contribuem somente quando o preço é reduzido; resultados são deduplicados por aplicativo. `coming_soon` alimenta o calendário sem inventar datas que o endpoint não fornece. Preços inteiros são divididos por cem e precisam corresponder à moeda esperada da região (BRL ou USD). Respostas de outra moeda são rejeitadas, sem relabeling ou conversão.
 
 CheapShark: até sessenta ofertas ordenadas pelo índice da fonte; lojas são consultadas na API oficial. Valores permanecem em USD. Redirecionamentos usam `https://www.cheapshark.com/redirect?id=...` com o ID codificado uma única vez. Nenhuma comparação numérica entre moedas diferentes ocorre na ordenação por preço: resultados são agrupados por moeda.
 
@@ -14,7 +14,13 @@ As ofertas de um jogo são um subconjunto desses destaques. Não representam uma
 
 ## Proxy Steam para produção
 
-`VITE_STEAM_PROXY_URL` aponta para uma URL pública de um Worker ou função sob seu controle. O proxy deve aceitar apenas GET, encaminhar para o endpoint Steam fixo acima, validar a resposta, aplicar cache de 5–10 minutos, limitar tráfego e emitir CORS somente para as origens do portal. Não aceite um parâmetro de URL arbitrário. Não use proxies públicos aleatórios. O proxy Vite é exclusivamente local e não faz parte de `dist`.
+`VITE_STEAM_PROXY_URL` aponta para uma URL pública de um Worker ou função sob seu controle. O proxy deve aceitar apenas GET, encaminhar para o endpoint Steam fixo acima com uma das duas combinações regionais permitidas, validar a resposta, aplicar cache de 5–10 minutos separado por região, limitar tráfego e emitir CORS somente para as origens do portal. Não aceite um parâmetro de URL arbitrário. Não use proxies públicos aleatórios. O proxy Vite é exclusivamente local e não faz parte de `dist`.
+
+## Idioma e apresentação
+
+O contexto de idioma fornece textos, formatação e moeda preferida. Dicionários locais traduzem somente a interface e o conteúdo demonstrativo; nomes oficiais dos jogos permanecem intactos. Datas usam date-fns e valores usam Intl.NumberFormat com o idioma escolhido. Nenhum texto de API é enviado a serviços externos de tradução. O armazenamento local contém somente a preferência PT/EN.
+
+Notícias futuras vindas dos feeds conservam o idioma original até que exista conteúdo traduzido autorizado. A troca de idioma não descarta a consulta de busca nem troca o URL da página. Filtros de preço voltam à moeda regional; os resgates gratuitos mantêm todas as moedas.
 
 ## Notícias por RSS
 

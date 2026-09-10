@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n/LocaleContext";
 import { useState } from "react";
 import { useGames } from "../hooks/useContent";
 import { GameGrid } from "../components/Games";
@@ -11,6 +12,7 @@ import {
 } from "../components/common";
 import { normalizeText } from "../utils/format";
 export default function GamesPage() {
+  const { t } = useLocale();
   const query = useGames();
   const [search, setSearch] = useState("");
   const [platform, setPlatform] = useState("All");
@@ -22,16 +24,17 @@ export default function GamesPage() {
   return (
     <div className="container inner-page">
       <div className="page-intro">
-        <span className="eyebrow">O PRÓXIMO MUNDO ESTÁ AQUI</span>
+        <span className="eyebrow">{t("O PRÓXIMO MUNDO ESTÁ AQUI")}</span>
         <h1>
-          Discover games<span>.</span>
+          {t("Discover games")}
+          <span>.</span>
         </h1>
-        <p>Grandes aventuras, pequenas descobertas e muitas horas pela frente.</p>
+        <p>{t("Grandes aventuras, pequenas descobertas e muitas horas pela frente.")}</p>
       </div>
       <div className="page-toolbar">
-        <SearchInput value={search} onChange={setSearch} placeholder="Encontrar um jogo…" />
+        <SearchInput value={search} onChange={setSearch} placeholder={t("Encontrar um jogo…")} />
         <span className="result-count" aria-live="polite">
-          {games.length} jogos para descobrir
+          {t("{count} jogos para descobrir", { count: games.length })}
         </span>
       </div>
       <CategoryTabs
@@ -49,8 +52,9 @@ export default function GamesPage() {
         <EmptyState />
       )}
       <DemoNotice>
-        Catálogo demonstrativo: plataformas, datas e avaliações de exemplo. Confira os detalhes
-        atuais na loja oficial.
+        {t(
+          "Catálogo demonstrativo: plataformas, datas e avaliações de exemplo. Confira os detalhes atuais na loja oficial.",
+        )}
       </DemoNotice>
     </div>
   );

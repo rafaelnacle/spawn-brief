@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1091500,
+    "name": "Cyberpunk 2077",
+    "source": "https://store.steampowered.com/app/1091500/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/e9047d8ec47ae3d94bb8b464fb0fc9e9972b4ac7/header.jpg?t=1784714077",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_2f649b68d579bf87011487d29bc4ccbfdd97d34f.1920x1080.jpg?t=1784714077",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_hero.jpg",
+    "hero_bytes": 222935,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_600x900.jpg",
+    "cover_bytes": 54176
+  },
+  {
+    "id": 1245620,
+    "name": "ELDEN RING",
+    "source": "https://store.steampowered.com/app/1245620/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg?t=1787868578",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_943bf6fe62352757d9070c1d33e50b92fe8539f1.1920x1080.jpg?t=1787868578",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg",
+    "hero_bytes": 203966,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg",
+    "cover_bytes": 52021
+  },
+  {
+    "id": 1086940,
+    "name": "Baldur's Gate 3",
+    "source": "https://store.steampowered.com/app/1086940/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/48a2fcbda8565bb45025e98fd8ebde8a7203f6a0/header.jpg?t=1777363040",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_c73bc54415178c07fef85f54ee26621728c77504.1920x1080.jpg?t=1777363040",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_hero.jpg",
+    "hero_bytes": 342486,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_600x900.jpg",
+    "cover_bytes": 66971
+  },
+  {
+    "id": 1030300,
+    "name": "Hollow Knight: Silksong",
+    "source": "https://store.steampowered.com/app/1030300/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/7983574d464e6559ac7e24275727f73a8bcca1f3/header.jpg?t=1776125736",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/26950369fe4b03c2268620eb9815c8a246aa0b06/ss_26950369fe4b03c2268620eb9815c8a246aa0b06.1920x1080.jpg?t=1776125736",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/library_hero.jpg",
+    "hero_bytes": 238432,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/library_600x900.jpg",
+    "cover_bytes": 56810
+  },
+  {
+    "id": 1145350,
+    "name": "Hades II",
+    "source": "https://store.steampowered.com/app/1145350/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/91ac334a2c137d08968ccc0bc474a02579602100/header.jpg?t=1779901265",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_ef0f63061d0a0a9a7e46f3b84f125d25330e8f19.1920x1080.jpg?t=1779901265",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/library_hero.jpg",
+    "hero_bytes": 246724,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/library_600x900.jpg",
+    "cover_bytes": 60402
+  },
+  {
+    "id": 3017860,
+    "name": "DOOM: The Dark Ages",
+    "source": "https://store.steampowered.com/app/3017860/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3017860/header.jpg?t=1783452885",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3017860/ss_ba66d42e3d1ea78e5b085682484210b390eb9ccc.1920x1080.jpg?t=1783452885",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3017860/library_hero.jpg",
+    "hero_bytes": 347529,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3017860/library_600x900.jpg",
+    "cover_bytes": 76490
+  },
+  {
+    "id": 1903340,
+    "name": "Clair Obscur: Expedition 33",
+    "source": "https://store.steampowered.com/app/1903340/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1903340/be3305b02d4db0dffa3458537118423bf2792d7e/header.jpg?t=1782830877",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1903340/ss_483a27df5072beb3a4650634a764bda750fbcb82.1920x1080.jpg?t=1782830877",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1903340/library_hero.jpg",
+    "hero_bytes": 386844,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1903340/library_600x900.jpg",
+    "cover_bytes": 54953
+  },
+  {
+    "id": 2050650,
+    "name": "Resident Evil 4",
+    "source": "https://store.steampowered.com/app/2050650/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg?t=1772502922",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/ss_59d1b19964cc532213df92c8287b75a0bffeb33c.1920x1080.jpg?t=1772502922",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_hero.jpg",
+    "hero_bytes": 250815,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_600x900.jpg",
+    "cover_bytes": 34266
+  },
+  {
+    "id": 2358720,
+    "name": "Black Myth: Wukong",
+    "source": "https://store.steampowered.com/app/2358720/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2358720/header.jpg?t=1760601605",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2358720/ss_86c4b7462bba219a0d0b89931a35812b9f188976.1920x1080.jpg?t=1760601605",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2358720/library_hero.jpg",
+    "hero_bytes": 184873,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2358720/library_600x900.jpg",
+    "cover_bytes": 52678
+  },
+  {
+    "id": 553850,
+    "name": "HELLDIVERS\u2122 2",
+    "source": "https://store.steampowered.com/app/553850/",
+    "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/850e2f9e5bb15c5706bb9a1edc832f4f782e8be5/header.jpg?t=1788431424",
+    "screenshot": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/aed08979e15f54798f287dd8820fb5838476b5fa/ss_aed08979e15f54798f287dd8820fb5838476b5fa.1920x1080.jpg?t=1788431424",
+    "released": true,
+    "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/library_hero.jpg",
+    "hero_bytes": 275311,
+    "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/library_600x900.jpg",
+    "cover_bytes": 66023
+  }
+]

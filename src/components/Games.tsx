@@ -9,6 +9,7 @@ import {
   ErrorState,
   LoadingSkeleton,
   SectionHeader,
+  ContentLabel,
 } from "./common";
 import { useGames } from "../hooks/useContent";
 import { useSteam } from "../hooks/useDeals";
@@ -33,6 +34,7 @@ export function GameCard({ game, rank }: { game: Game; rank?: number }) {
           {rank && <span className="game-rank">{String(rank).padStart(2, "0")}</span>}
         </div>
         <h3>{game.title}</h3>
+        <ContentLabel rating={game.contentRating} />
         <p>{game.genres.join(" · ")}</p>
         <Platforms platforms={game.platforms} />
       </Link>
@@ -88,6 +90,7 @@ export function ReleaseCard({ release }: { release: GameRelease }) {
             {release.releaseDate ? fullDate(release.releaseDate, locale) : t(release.releaseLabel)}
           </span>
           <h3>{release.title}</h3>
+          <ContentLabel rating={release.contentRating} />
           <div>
             <Platforms platforms={release.platforms} />
             <ArrowUpRight size={16} />

@@ -98,6 +98,7 @@ export const news: NewsArticle[] = [
   category: item.category as NewsArticle["category"],
   source: "SpawnBrief · Demo",
   isDemo: true,
+  contentRating: "non-explicit" as const,
   publishedAt: `2026-09-${String(10 - Math.floor(index / 3)).padStart(2, "0")}T${String(18 - (index % 3)).padStart(2, "0")}:00:00Z`,
   url: `https://store.steampowered.com/app/${({ "clair-obscur-expedition-33": 1903340, "hollow-knight-silksong": 1030300, "doom-the-dark-ages": 3017860, "hades-ii": 1145350, "cyberpunk-2077": 1091500, "elden-ring": 1245620, "baldurs-gate-3": 1086940, "resident-evil-4": 2050650, "black-myth-wukong": 2358720, "helldivers-2": 553850 } as Record<string, number>)[item.gameSlug]}/`,
 }));

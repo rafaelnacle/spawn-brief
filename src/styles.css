@@ -2048,3 +2048,112 @@ select {
     right: -16px;
   }
 }
+/* Content preferences use the same compact controls as the language selector. */
+.content-settings {
+  position: relative;
+  flex-shrink: 0;
+}
+.content-settings summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 10px;
+  list-style: none;
+}
+.content-settings summary::-webkit-details-marker {
+  display: none;
+}
+.content-settings summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.content-settings[open] summary {
+  color: var(--accent);
+}
+.content-settings-panel {
+  position: absolute;
+  top: calc(100% + 16px);
+  right: 0;
+  z-index: 40;
+  width: min(320px, calc(100vw - 32px));
+  padding: 20px;
+  border: 1px solid #41414b;
+  background: #1a1a20;
+  border-radius: 6px;
+  box-shadow: 0 14px 35px #0005;
+}
+.content-toggle {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.content-toggle input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.content-settings-panel p {
+  font-size: 11px;
+  color: #bcbcc5;
+  line-height: 1.65;
+  margin-top: 14px;
+}
+.content-settings-panel .content-classification-note {
+  font-size: 10px;
+  color: var(--muted);
+}
+.content-rating {
+  display: block;
+  font-size: 9px;
+  color: #a7a7b2;
+  margin-top: 8px;
+}
+.content-rating.explicit {
+  color: var(--accent);
+}
+@media (min-width: 1051px) {
+  .header-inner {
+    gap: 22px;
+  }
+  .header-search {
+    min-width: 145px;
+  }
+  .content-settings summary span {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .header-inner {
+    grid-template-columns: 1fr auto auto auto;
+    column-gap: 7px;
+  }
+  .content-settings {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .content-settings summary span {
+    display: none;
+  }
+  .content-settings-panel {
+    position: fixed;
+    top: 64px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
+  .language-switch {
+    grid-column: 3;
+  }
+  .menu-button {
+    grid-column: 4;
+  }
+}

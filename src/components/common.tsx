@@ -4,6 +4,8 @@ import { ArrowUpRight, Gamepad2, Search, RotateCw, ArrowRight } from "lucide-rea
 import { Link } from "react-router-dom";
 import type { Currency } from "../types";
 import { formatPrice } from "../utils/format";
+import { publicAsset } from "../utils/assets";
+import type { ContentRating } from "../features/content/contentPolicy";
 export function Artwork({
   src,
   alt,
@@ -20,7 +22,7 @@ export function Artwork({
     <div className={`artwork ${className}`}>
       {src && !failed ? (
         <img
-          src={src}
+          src={src.startsWith("/") ? publicAsset(src) : src}
           alt={alt}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
@@ -179,6 +181,15 @@ export function StoreBadge({ store }: { store: string }) {
     <span className="store-badge">
       <Gamepad2 size={13} />
       {store}
+    </span>
+  );
+}
+export function ContentLabel({ rating }: { rating?: ContentRating }) {
+  const { t } = useLocale();
+  if (!rating || rating === "non-explicit") return null;
+  return (
+    <span className={`content-rating ${rating === "explicit-sexual" ? "explicit" : ""}`}>
+      {t(rating === "explicit-sexual" ? "Conteúdo sexual explícito" : "Conteúdo não classificado")}
     </span>
   );
 }

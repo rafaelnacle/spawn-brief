@@ -1,5 +1,11 @@
 import type { Currency, Deal, GameRelease, Store } from "../types/index.ts";
 import { isRecord, safeImage } from "./http.ts";
+import { classifyContent } from "../features/content/contentPolicy.ts";
+function contentRating(value: Record<string, unknown>) {
+  return classifyContent(
+    isRecord(value.content_descriptors) ? value.content_descriptors.ids : undefined,
+  );
+}
 
 export type SteamGameResponse = {
   id: number;
@@ -31,6 +37,12 @@ export function mapSteamGameToDeal(value: unknown, currency: Currency = "BRL"): 
     value.currency !== currency
   )
     return null;
+  if (
+    typeof value.discount_expiration === "number" &&
+    value.discount_expiration > 0 &&
+    value.discount_expiration * 1000 <= Date.now()
+  )
+    return null;
   const normal = value.original_price,
     sale = value.final_price;
   if (
@@ -45,6 +57,7 @@ export function mapSteamGameToDeal(value: unknown, currency: Currency = "BRL"): 
     return null;
   return {
     id: `steam-${currency}-${value.id}`,
+    contentRating: contentRating(value),
     title: value.name,
     image: safeImage(value.large_capsule_image) ?? safeImage(value.header_image),
     store: "Steam",
@@ -93,6 +106,7 @@ export function mapCheapSharkDeal(value: unknown, stores: Store[]): Deal | null 
       : undefined;
   return {
     id: `cheapshark-${value.dealID}`,
+    contentRating: contentRating(value),
     title: value.title,
     image: safeImage(value.thumb),
     store: stores.find((store) => store.id === value.storeID)?.name ?? `Loja ${value.storeID}`,
@@ -121,6 +135,7 @@ export function mapSteamRelease(value: unknown): GameRelease | null {
   const releaseDate = date && Number.isFinite(date.getTime()) ? date.toISOString() : undefined;
   return {
     id: `steam-release-${value.id}`,
+    contentRating: contentRating(value),
     title: value.name,
     image: safeImage(value.large_capsule_image) ?? safeImage(value.header_image),
     releaseDate,

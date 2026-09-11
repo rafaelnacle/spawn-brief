@@ -5,3 +5,6 @@ dist/
 !.env.example
 *.local
 *.tsbuildinfo
+
+public/data/
+.cache/

@@ -1,41 +1,37 @@
-# Contratos e próximos adaptadores
+# Contratos e adaptadores
 
-## Limites da primeira entrega
+Componentes consomem modelos de `src/types` por hooks do TanStack Query. Serviços e mappers validam dados externos. O conteúdo demonstrativo fica em `src/data`, com textos em inglês em `src/i18n`.
 
-Componentes consomem modelos de `src/types` por hooks do TanStack Query. Chamadas externas ficam em `src/services`; as validações e conversões ficam em `mappers.ts`. Dados de demonstração ficam em `src/data`.
+## Dados estáticos para Pages
 
-O cache dura dez minutos para promoções, cinco para notícias e uma hora para jogos. Chamadas têm timeout de quinze segundos e uma tentativa adicional. As duas fontes de promoções falham independentemente. Respostas inválidas são descartadas; valores malformados não viram preços zero. Imagens externas aceitam somente HTTPS.
+`scripts/sync-data.mjs` consulta os endpoints oficiais da Steam `featuredcategories` nas regiões BR/US, promoções e lojas da CheapShark e `appdetails` da Steam para descritores de conteúdo. Nenhuma chamada exige chave e nenhum website é raspado. Apenas os campos utilizados são gravados em `public/data/steam-br.json`, `steam-us.json` e `cheapshark.json`, com versão e horário da consulta. Os arquivos gerados e o cache local ficam fora do Git.
 
-Steam: `featuredcategories?cc=br&l=brazilian` para português e `featuredcategories?cc=us&l=english` para inglês. O cache do TanStack Query inclui o idioma; IDs normalizados incluem a moeda. Links das ofertas apontam para a região consultada. `specials`, `top_sellers` e `new_releases` contribuem somente quando o preço é reduzido; resultados são deduplicados por aplicativo. `coming_soon` alimenta o calendário sem inventar datas que o endpoint não fornece. Preços inteiros são divididos por cem e precisam corresponder à moeda esperada da região (BRL ou USD). Respostas de outra moeda são rejeitadas, sem relabeling ou conversão.
+O script usa timeouts, no máximo três tentativas por chamada, dois trabalhadores para metadados e espaçamento entre consultas. Descritores conhecidos podem ser reaproveitados do cache local por até sete dias. Falhas pontuais de classificação resultam em “unknown”; falha total de classificação ou de uma fonte obrigatória impede a publicação de um catálogo incompleto. O GitHub Actions consulta tudo novamente a cada execução e não faz commits de dados.
 
-CheapShark: até sessenta ofertas ordenadas pelo índice da fonte; lojas são consultadas na API oficial. Valores permanecem em USD. Redirecionamentos usam `https://www.cheapshark.com/redirect?id=...` com o ID codificado uma única vez. Nenhuma comparação numérica entre moedas diferentes ocorre na ordenação por preço: resultados são agrupados por moeda.
+O navegador consulta os JSON no mesmo domínio, evitando CORS e a necessidade de proxy ou backend. Não há chamadas diretas do navegador à Steam ou CheapShark. O botão de atualização busca a versão publicada mais recente, não dispara o workflow. A agenda de seis horas do GitHub não é uma garantia de execução pontual.
 
-As ofertas de um jogo são um subconjunto desses destaques. Não representam uma pesquisa completa de preços nem histórico. O site não calcula ou inventa um menor preço histórico. Jogos gratuitos só passam se `normalPrice > 0` e `salePrice === 0`.
+Cache do cliente: dez minutos para promoções, cinco para notícias e uma hora para jogos. Steam Brasil e Estados Unidos usam chaves de consulta distintas. Fonte indisponível não transforma preços em zero nem remove as ofertas válidas da outra fonte.
 
-## Proxy Steam para produção
+## Preços e calendário
 
-`VITE_STEAM_PROXY_URL` aponta para uma URL pública de um Worker ou função sob seu controle. O proxy deve aceitar apenas GET, encaminhar para o endpoint Steam fixo acima com uma das duas combinações regionais permitidas, validar a resposta, aplicar cache de 5–10 minutos separado por região, limitar tráfego e emitir CORS somente para as origens do portal. Não aceite um parâmetro de URL arbitrário. Não use proxies públicos aleatórios. O proxy Vite é exclusivamente local e não faz parte de `dist`.
+Steam: `specials`, `top_sellers` e `new_releases` contribuem somente quando há desconto; resultados são deduplicados por aplicativo e moeda. Centavos são divididos por cem e a moeda precisa corresponder à região. Descontos com prazo conhecido já encerrado são descartados. `coming_soon` fornece lançamentos; datas ausentes não são inventadas.
 
-## Idioma e apresentação
+CheapShark: até sessenta ofertas e nomes das lojas pela API oficial. Valores permanecem em USD; os IDs de redirecionamento são codificados uma única vez. Não há comparação numérica entre moedas diferentes. Ofertas de um jogo representam apenas esse conjunto de destaques, sem histórico de menor preço. Jogos grátis exigem preço normal positivo e preço atual zero.
 
-O contexto de idioma fornece textos, formatação e moeda preferida. Dicionários locais traduzem somente a interface e o conteúdo demonstrativo; nomes oficiais dos jogos permanecem intactos. Datas usam date-fns e valores usam Intl.NumberFormat com o idioma escolhido. Nenhum texto de API é enviado a serviços externos de tradução. O armazenamento local contém somente a preferência PT/EN.
+## Conteúdo sexual explícito
 
-Notícias futuras vindas dos feeds conservam o idioma original até que exista conteúdo traduzido autorizado. A troca de idioma não descarta a consulta de busca nem troca o URL da página. Filtros de preço voltam à moeda regional; os resgates gratuitos mantêm todas as moedas.
+`content_descriptors.ids` vem da API de detalhes da Steam. Somente o descritor **3 — Adult Only Sexual Content** gera `explicit-sexual`. Os descritores 1 (alguma nudez/sexualidade), 2 (violência), 4 (nudez/sexualidade frequente) e 5 (conteúdo adulto geral) não bastam para ocultar um jogo. Não são usados classificação etária, gênero, tags vagas ou palavras no título.
 
-## Notícias por RSS
+Sem descritores válidos, o estado é `unknown`. Isso não é interpretado como pornografia: o item pode aparecer com indicação de classificação ausente. Jogos sem vínculo com a Steam também podem permanecer desconhecidos. A opção é uma preferência de exibição baseada nas fontes, não controle de acesso ou classificação infalível.
 
-Substitua `newsService.getArticles` por uma chamada ao seu próprio agregador. Contrato de retorno: `NewsArticle[]`, com `isDemo: false`. Fontes propostas: PC Gamer, IGN, GameSpot, Polygon, Eurogamer e Game Developer. Ainda não há scraping nem chamadas a esses veículos.
+A preferência começa desativada e é aplicada nos hooks, antes de renderizar cards e imagens: home, ofertas, jogos gratuitos, lançamentos, catálogo, notícias, busca e detalhes. O cache guarda os dados completos, então ativar/desativar a opção atualiza todas as superfícies sem refazer consultas. Conteúdo demo atual foi revisado como não pornográfico. Metadados de futuras fontes devem ser mapeados para o mesmo modelo interno.
 
-Uma futura Cloudflare Worker, Vercel Function ou Netlify Function deve buscar uma lista fixa de feeds autorizados, fazer parsing de RSS/Atom no servidor, deduplicar por link, validar datas e URLs, resumir trechos, sanitizar texto e retornar JSON. Exponha apenas título, resumo, imagem autorizada, fonte, data, categoria e URL do artigo original. Não copie artigos completos. Valide URLs de saída HTTP(S) antes de retornar e remova HTML. A UI renderiza texto, sem `dangerouslySetInnerHTML`.
+Referências: [pesquisa de conteúdo da Steam](https://partner.steamgames.com/doc/gettingstarted/contentsurvey) e API pública `https://store.steampowered.com/api/appdetails?appids=271590&filters=content_descriptors` (GTA V: descritor 5 na verificação da implementação).
 
-## RAWG e IsThereAnyDeal
+## Idiomas e integrações futuras
 
-`futureProviders` marca ambos com `requiresServerProxy: true`. Nenhuma chamada autenticada está implementada. Crie posteriormente um adaptador que receba a resposta já normalizada do servidor, preservando `Game`, `GameRelease` e `Deal`. Chaves ficam exclusivamente nos secrets da função, nunca em variáveis `VITE_*`. Acrescente atribuição conforme os termos da API escolhida.
+O contexto de idioma traduz a interface e o conteúdo demonstrativo. Nomes oficiais ficam intactos. Datas usam date-fns; valores usam Intl.NumberFormat. Só preferências de idioma e exibição são armazenadas no navegador.
 
-## Imagens
+Substitua `newsService.getArticles` futuramente por um agregador RSS próprio, com fontes permitidas, deduplicação, validação de datas/URLs, resumos curtos e HTML removido. Retorne `NewsArticle[]` com fonte, data, URL original e `isDemo: false`. Não copie artigos completos. Notícias reais conservam o idioma original até existir tradução autorizada.
 
-`image-sources.json` registra os URLs oficiais da Steam das artes presentes em `public/images`. São materiais promocionais dos publishers; disponibilidade pública não concede licença aberta. Os arquivos não são assets gerados por IA.
-
-## Revisão da arquitetura
-
-A interface está separada dos formatos externos. O próximo passo é conectar o agregador RSS e um catálogo seguro sem mudar os cards. Não adicionar autenticação, banco ou histórico de preços até existir um requisito concreto para isso. Esta entrega não publica código nem executa push.
+RAWG e IsThereAnyDeal continuam com `requiresServerProxy: true`, sem chamadas autenticadas. Mantenha futuras chaves apenas nos secrets de uma função; nunca em `VITE_*`. Imagens oficiais utilizadas estão documentadas em `image-sources.json`; disponibilidade pública não implica licença aberta.

@@ -2,6 +2,7 @@ import { useLocale } from "../i18n/LocaleContext";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Menu, Search, X } from "lucide-react";
+import { ContentSettings } from "./ContentSettings";
 const navigation = [
   ["/", "Home"],
   ["/news", "News"],
@@ -70,6 +71,7 @@ export function Header() {
             <ArrowUpRight size={17} />
           </button>
         </form>
+        <ContentSettings />
         <div className="language-switch" role="group" aria-label={t("Idioma do site")}>
           <button
             type="button"
@@ -144,11 +146,20 @@ export function Layout() {
   const { t } = useLocale();
   return (
     <>
-      <a className="skip-link" href="#main">
+      <a
+        className="skip-link"
+        href="#main"
+        onClick={(event) => {
+          event.preventDefault();
+          const main = document.getElementById("main");
+          main?.focus();
+          main?.scrollIntoView();
+        }}
+      >
         {t("Pular para o conteúdo")}
       </a>
       <Header />
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <Outlet />
       </main>
       <Footer />

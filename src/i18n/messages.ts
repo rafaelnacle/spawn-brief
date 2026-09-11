@@ -116,8 +116,8 @@ export const english: Record<string, string> = {
   Lançamento: "Release date",
   Desenvolvedora: "Developer",
   "Ver na Steam": "View on Steam",
-  "Informações do catálogo demonstrativo. Preços abaixo são consultados nas lojas em tempo real, quando disponíveis.":
-    "Demo catalog information. Prices below are fetched from the stores when available.",
+  "Informações do catálogo demonstrativo. Preços abaixo vêm da última atualização pública das lojas.":
+    "Demo catalog information. Prices below come from the latest public store update.",
   "Onde comprar": "Where to buy",
   "ESCOLHA SEU PRÓXIMO SAVE": "CHOOSE YOUR NEXT SAVE",
   "Preço normal": "Regular price",
@@ -219,6 +219,17 @@ export const english: Record<string, string> = {
     "Regional Steam prices (BRL in Brazil, USD in the United States) and CheapShark deals always in USD. No currency conversion. Confirm availability and the final price at the store. This selection includes up to 60 CheapShark deals and Steam’s featured offers.",
   "As promoções vêm da Steam e da CheapShark. Português consulta a Steam brasileira em reais; inglês consulta a loja americana em dólares. A CheapShark só fornece dólares. Nenhuma conversão cambial é aplicada.":
     "Deals come from Steam and CheapShark. Portuguese uses Steam Brazil prices in BRL; English uses Steam US prices in USD. CheapShark only provides USD. No currency conversion is applied.",
+  Conteúdo: "Content",
+  "Exibir jogos com conteúdo sexual explícito": "Show games with explicit sexual content",
+  "Filtra jogos pornográficos identificados pelas lojas. GTA, violência e classificação +18 não são bloqueados por esse motivo.":
+    "Filters pornographic games identified by the stores. GTA, violence and an 18+ rating are not blocked for that reason.",
+  "A classificação depende da fonte. Jogos sem informação podem aparecer e são marcados como não classificados.":
+    "Classification depends on the source. Games without information may appear and are marked as unclassified.",
+  "Conteúdo sexual explícito": "Explicit sexual content",
+  "Conteúdo não classificado": "Content not classified",
+  "Atualizado {date}": "Updated {date}",
+  "Os preços são atualizados periodicamente. Confira o valor final e a disponibilidade na loja.":
+    "Prices are updated periodically. Confirm the final price and availability at the store.",
 };
 
 export const portuguese: Record<string, string> = {

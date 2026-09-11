@@ -104,7 +104,7 @@ export default function GamePage() {
         </div>
         <DemoNotice>
           {t(
-            "Informações do catálogo demonstrativo. Preços abaixo são consultados nas lojas em tempo real, quando disponíveis.",
+            "Informações do catálogo demonstrativo. Preços abaixo vêm da última atualização pública das lojas.",
           )}
         </DemoNotice>
         <section className="section">

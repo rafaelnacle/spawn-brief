@@ -1,14 +1,11 @@
 import type { Deal, Store } from "../types";
-import { fetchJson, isRecord } from "./http";
+import { isRecord } from "./http";
 import { mapCheapSharkDeal } from "./mappers";
+import { readSnapshot } from "./snapshots";
 export async function getCheapSharkDeals(signal?: AbortSignal): Promise<Deal[]> {
-  const [deals, storeData] = await Promise.all([
-    fetchJson(
-      "https://www.cheapshark.com/api/1.0/deals?pageSize=60&onSale=1&sortBy=Deal%20Rating",
-      signal,
-    ),
-    fetchJson("https://www.cheapshark.com/api/1.0/stores", signal),
-  ]);
+  const snapshot = await readSnapshot("cheapshark", signal);
+  const deals = snapshot.deals,
+    storeData = snapshot.stores;
   if (!Array.isArray(deals) || !Array.isArray(storeData))
     throw new Error("Resposta da CheapShark inválida.");
   const stores: Store[] = storeData.flatMap((value) =>
@@ -18,5 +15,6 @@ export async function getCheapSharkDeals(signal?: AbortSignal): Promise<Deal[]> 
   );
   return deals
     .map((value) => mapCheapSharkDeal(value, stores))
-    .filter((value): value is Deal => value !== null);
+    .filter((value): value is Deal => value !== null)
+    .map((deal) => ({ ...deal, checkedAt: snapshot.updatedAt as string }));
 }

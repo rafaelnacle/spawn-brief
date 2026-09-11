@@ -1,6 +1,7 @@
 import type { Game } from "../types";
 
 const artwork = (id: number) => ({
+  contentRating: "non-explicit" as const,
   image: `/images/${id}-hero.jpg`,
   cover: `/images/${id}-cover.jpg`,
 });

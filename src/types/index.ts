@@ -1,3 +1,4 @@
+import type { ContentRating } from "../features/content/contentPolicy";
 export const newsCategories = [
   "All",
   "PC",
@@ -12,6 +13,7 @@ export type Platform = "PC" | "PlayStation" | "Xbox" | "Nintendo";
 export type Currency = "BRL" | "USD";
 export type Store = { id: string; name: string };
 export type NewsArticle = {
+  contentRating?: ContentRating;
   id: string;
   title: string;
   description: string;
@@ -25,6 +27,8 @@ export type NewsArticle = {
   isDemo: boolean;
 };
 export type Deal = {
+  contentRating?: ContentRating;
+  checkedAt?: string;
   id: string;
   title: string;
   image?: string;
@@ -38,6 +42,7 @@ export type Deal = {
   provider: "Steam" | "CheapShark";
 };
 export type Game = {
+  contentRating?: ContentRating;
   id: number;
   slug: string;
   title: string;
@@ -52,6 +57,7 @@ export type Game = {
   publisher: string;
 };
 export type GameRelease = {
+  contentRating?: ContentRating;
   id: string;
   title: string;
   image?: string;

@@ -10,8 +10,10 @@ import {
   Price,
   SectionHeader,
   StoreBadge,
+  ContentLabel,
 } from "./common";
 import { useDeals } from "../hooks/useDeals";
+import { relativeDate } from "../utils/format";
 export function DealBadge({ discount }: { discount: number }) {
   return <span className="deal-badge">−{discount}%</span>;
 }
@@ -31,6 +33,7 @@ export function DealCard({ deal }: { deal: Deal }) {
       <div className="deal-body">
         <StoreBadge store={deal.store} />
         <h3>{deal.title}</h3>
+        <ContentLabel rating={deal.contentRating} />
         <div className="deal-price">
           <DealBadge discount={deal.discount} />
           <div>
@@ -59,15 +62,34 @@ export function DealGrid({ deals, compact = false }: { deals: Deal[]; compact?: 
   );
 }
 export function DealsStatus({ query }: { query: ReturnType<typeof useDeals> }) {
-  const { t } = useLocale();
-  return query.failedSources.length > 0 && !query.isError ? (
-    <p className="data-notice">
-      {t("{sources} indisponível no momento. Tente novamente ou consulte outras lojas.", {
-        sources: query.failedSources.join(" / "),
-      })}
-      <button onClick={() => void query.refetch()}>{t("Tentar novamente")}</button>
-    </p>
-  ) : null;
+  const { t, locale } = useLocale();
+  const checkedAt = query.data
+    .map((deal) => deal.checkedAt)
+    .filter((date): date is string => Boolean(date))
+    .sort()[0];
+  return (
+    <>
+      {query.failedSources.length > 0 && !query.isError ? (
+        <p className="data-notice">
+          {t("{sources} indisponível no momento. Tente novamente ou consulte outras lojas.", {
+            sources: query.failedSources.join(" / "),
+          })}
+          <button onClick={() => void query.refetch()}>{t("Tentar novamente")}</button>
+        </p>
+      ) : null}
+      {checkedAt && (
+        <p className="price-note">
+          <time dateTime={checkedAt}>
+            {t("Atualizado {date}", { date: relativeDate(checkedAt, locale) })}
+          </time>
+          {" · "}
+          {t(
+            "Os preços são atualizados periodicamente. Confira o valor final e a disponibilidade na loja.",
+          )}
+        </p>
+      )}
+    </>
+  );
 }
 export function HotDeals() {
   const { t, currency } = useLocale();
@@ -146,6 +168,7 @@ export function FreeGames() {
               <div>
                 <span className="free-label">{t("GRÁTIS PARA RESGATAR")}</span>
                 <h3>{deal.title}</h3>
+                <ContentLabel rating={deal.contentRating} />
                 <p className="free-meta">
                   <StoreBadge store={deal.store} />
                   <span className="free-original-price">

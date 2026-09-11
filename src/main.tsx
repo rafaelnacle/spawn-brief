@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Layout } from "./components/Layout";
 import Home from "./pages/Home";
@@ -18,12 +18,13 @@ import { ContentPreferencesProvider } from "./features/content/ContentPreference
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
+const Router = import.meta.env.MODE === "pages" ? HashRouter : BrowserRouter;
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <LocaleProvider>
         <ContentPreferencesProvider>
-          <BrowserRouter>
+          <Router>
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<Home />} />
@@ -37,7 +38,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
-          </BrowserRouter>
+          </Router>
         </ContentPreferencesProvider>
       </LocaleProvider>
     </QueryClientProvider>

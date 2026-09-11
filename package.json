@@ -9,10 +9,11 @@
     "preview": "vite preview --host 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint src scripts",
-    "format": "oxfmt src scripts *.ts *.json index.html README.md docs",
-    "format:check": "oxfmt --check src scripts *.ts *.json index.html README.md docs",
+    "format": "oxfmt src scripts .github *.ts *.json index.html README.md docs",
+    "format:check": "oxfmt --check src scripts .github *.ts *.json index.html README.md docs",
     "test": "node --experimental-strip-types --test src/services/mappers.test.ts src/i18n/locale.test.ts src/features/content/contentPolicy.test.ts",
-    "sync:data": "node scripts/sync-data.mjs"
+    "sync:data": "node scripts/sync-data.mjs",
+    "build:pages": "tsc --noEmit && vite build --mode pages && node scripts/check-pages.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.0",
